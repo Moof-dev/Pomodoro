@@ -17,5 +17,5 @@ class UserService:
         return UserLoginSchema(user_id=user.id, access_token=user.access_token)
 
     @staticmethod
-    def _generate_access_token() -> str:
+    def _generate_access_token(user_id: int) -> str:
         return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(24))
