@@ -1,6 +1,6 @@
 .venv
 .idea
-__pyechache__/
+__pyechache__
 *.local*
 docker.bat
 r.bat
