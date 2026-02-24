@@ -4,13 +4,13 @@ import os
 class Setting(BaseSettings):
     #postgresql+psycopg2://user:password@hostname/database_name
     #DataBase settings
+    DB_HOSTNAME: str = "localhost"
     DB_USER: str = "user"
     DB_PASSWORD: str = "password"
-    DB_HOSTNAME: str = "0.0.0.0"
     DB_NAME: str = "database_name"
     #Redis settings
-    REDIS_HOSTNAME: str = "127.0.0.1"
-    REDIS_PORT: int = 6379
+    CACHE_HOSTNAME: str = "localhost"
+    CACHE_PORT: int = 6379
 
 
 
