@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from repository import UserRepository
-from schema import UserLoginSchema
+from schema import UserLoginSchema, UserCreateSchema
 
 from service.auth import AuthService
 
@@ -12,8 +12,8 @@ class UserService:
     auth_service: AuthService
 
 
-    def create_user(self, username: str, password: str) -> UserLoginSchema:
-        user =  self.user_repository.create_user(username=username, password=password)
+    async def create_user(self, username: str, password: str) -> UserLoginSchema:
+        user =  await self.user_repository.create_user(UserCreateSchema(username=username, password=password))
         access_token = self.auth_service.generate_access_token(user_id=user.id)
         return UserLoginSchema(user_id=user.id, access_token=access_token)
 
