@@ -3,6 +3,7 @@ from fastapi import Depends, Request, security, Security, HTTPException
 from sqlalchemy.orm import Session
 
 from cache import get_redis_connection
+from client import GoogleClient
 from database import get_db_session
 from exception import TokenNotCorrect, TokenExpired
 from repository import TaskRepository, TaskCache, UserRepository
@@ -31,12 +32,18 @@ def get_task_service(
 def get_user_repository(db_session: Session = Depends(get_db_session)) -> UserRepository:
     return UserRepository(db_session=db_session)
 
-
+def get_google_client() -> GoogleClient:
+    return GoogleClient(settings=Setting())
 
 def get_auth_service(
-    user_repository: UserRepository = Depends(get_user_repository)
+    user_repository: UserRepository = Depends(get_user_repository),
+    google_client: GoogleClient =  Depends(get_google_client)
 ) -> AuthService:
-    return AuthService(user_repository=user_repository, settings=Setting())
+    return AuthService(
+        user_repository=user_repository,
+        settings=Setting(),
+        google_client=google_client
+    )
 
 def get_user_service(
     user_repository: UserRepository = Depends(get_user_repository),
