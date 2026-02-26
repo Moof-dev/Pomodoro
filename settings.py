@@ -5,7 +5,7 @@ class Setting(BaseSettings):
     #postgresql+psycopg2://user:password@hostname/database_name
     #DataBase settings
     DB_HOSTNAME: str = "localhost"
-    DB_DRIVER: str = "postgresql+psycopg2"
+    DB_DRIVER: str = "postgresql+asyncpg"
     DB_USER: str = "user"
     DB_PASSWORD: str = "password"
     DB_NAME: str = "database_name"
