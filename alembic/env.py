@@ -6,10 +6,9 @@ from sqlalchemy.ext.asyncio import create_async_engine # Добавлено дл
 from alembic import context
 
 # Импорт твоих настроек и базы
-from settings import Setting
-from database import Base
+from app.settings import Setting
+from app.infrastructure.database import Base
 # Импорт всех моделей для autogenerate
-from models import * # 1. Инициализация конфига
 settings = Setting()
 config = context.config
 
