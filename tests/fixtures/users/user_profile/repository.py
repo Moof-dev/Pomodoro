@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 import pytest
 
+from app.users.user_profile.repository import UserRepository
+
 
 @dataclass
 class FakeUserRepository:
@@ -25,5 +27,9 @@ class FakeUserRepository:
         return user
 
 @pytest.fixture
-def user_repository(user_profile_factory):
+def mock_user_repository(user_profile_factory):
     return FakeUserRepository(user_profile_factory=user_profile_factory)
+
+@pytest.fixture
+def user_repository(get_db_session):
+    return UserRepository(db_session=get_db_session)

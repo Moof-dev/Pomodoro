@@ -30,5 +30,5 @@ class FakeTaskRepository:
         pass
 
 @pytest.fixture
-def task_repository(task_models_factory, faker):
+def mock_task_repository(task_models_factory, faker):
     return FakeTaskRepository(task_models_factory=task_models_factory, faker=faker)

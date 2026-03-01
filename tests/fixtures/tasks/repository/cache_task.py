@@ -20,5 +20,5 @@ class FakeTaskCache:
         pass
 
 @pytest.fixture
-def task_cache(task_schema_factory):
+def mock_task_cache(task_schema_factory):
     return FakeTaskCache(task_schema_factory=task_schema_factory)

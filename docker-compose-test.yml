@@ -1,0 +1,18 @@
+services:
+
+  db-test:
+    image: postgres:18.2
+    restart: always
+    shm_size: 128mb
+    ports:
+      - '5442:5432'
+
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres-test
+      POSTGRES_DB: pomodoro-test
+  cache-test:
+    image: redis:8.6.0-alpine
+    restart: always
+    ports:
+      - '6389:6379'

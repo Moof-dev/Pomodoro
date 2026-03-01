@@ -4,8 +4,8 @@ from app.users.user_profile.schema import UserCreateSchema
 
 
 
-async def test_create_user__success(user_service):
-    user_login = await user_service.create_user(body=UserCreateSchema())
+async def test_create_user__success(mock_user_service):
+    user_login = await mock_user_service.create_user(body=UserCreateSchema())
 
     assert isinstance(user_login, UserLoginSchema)
 
