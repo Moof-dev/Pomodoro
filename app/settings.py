@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 
 class Setting(BaseSettings):
@@ -40,7 +40,7 @@ class Setting(BaseSettings):
                 f"access_type=offline")
 
 
-    class Config:
-        # Читаем файл, путь к которому передан в ENV_FILE,
-        # либо берем .local.env по умолчанию
-        env_file = os.getenv("ENV_FILE", "../.dev.env")
+    model_config = SettingsConfigDict(
+        env_file=os.getenv("ENV_FILE", "../.dev.env"),
+        extra="ignore"  # Полезно добавить, чтобы не падать, если в .env есть лишние переменные
+    )

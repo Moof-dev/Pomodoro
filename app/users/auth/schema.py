@@ -10,7 +10,7 @@ class UserLoginSchema(BaseModel):
     access_token: str
 
 class GoogleUserData(BaseModel):
-    id: str
+    id: int
     email: str
     verified_email: bool
     name: str

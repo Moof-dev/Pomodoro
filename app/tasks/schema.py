@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, model_validator, ConfigDict
 
 
 class TaskSchema(BaseModel):
@@ -9,8 +9,6 @@ class TaskSchema(BaseModel):
     category_id: int
     user_id: int
 
-    class Config:
-        from_attributes = True
 
     @model_validator(mode="after")
     def check_name_or_pomodoro_count_is_not_non(self):
@@ -18,7 +16,17 @@ class TaskSchema(BaseModel):
             raise ValueError("name or pomodoro_count must be provided")
         return self
 
+    model_config = ConfigDict(
+        from_attributes=True
+    )
+
 class TaskCreateSchema(BaseModel):
-    name: str | None = None
-    pomodoro_count: int | None = None
+    name: str
+    pomodoro_count: int
     category_id: int
+
+
+class TaskCategorySchema(BaseModel):
+    id: int
+    type: str
+    name: str

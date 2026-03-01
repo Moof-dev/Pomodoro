@@ -1,7 +1,7 @@
 .venv
 .idea
-__pyecache__
-./__pyecache__
+__pyecache__/
+./__pyecache__/
 *.local*
 docker.bat
 r.bat
