@@ -1,10 +1,12 @@
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 
 
 from dataclasses import dataclass
 
-from app.users.user_profile.models import UserProfile
+from app.exception import UserAlreadyExistsException, BaseAppException, BadRequestException
+from app.infrastructure.database.models import UserProfile
 from app.users.user_profile.schema import UserCreateSchema
 
 
@@ -17,9 +19,18 @@ class UserRepository:
             **user.model_dump()
         ).returning(UserProfile.id)
         async with self.db_session as session:
-            user_id: int = (await session.execute(query)).scalar()
-            await session.commit()
-            return await self.get_user(user_id)
+            try:
+                user_id: int = (await session.execute(query)).scalar()
+                await session.commit()
+                return await self.get_user(user_id)
+            except IntegrityError as e:
+                await session.rollback()
+                error_msg = str(e.orig).lower()
+                if "unique" in error_msg:
+                    raise UserAlreadyExistsException()
+                raise BaseAppException()
+
+
 
     async def get_user(self, user_id: int) -> UserProfile | None:
         query = select(UserProfile).where(UserProfile.id == user_id)

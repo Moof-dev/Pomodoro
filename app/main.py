@@ -1,15 +1,11 @@
 from fastapi import FastAPI
-from app.tasks.handlers import router as tasks_router
-from app.users.auth.handlers import router as auth_router
-from app.users.user_profile.handlers import router as user_router
-
-
+from app.routers import all_routers
+from app.exception import BaseAppException
+from app.exception_handler import common_exception_handler
 
 app = FastAPI()
 
-app.include_router(router=tasks_router)
-app.include_router(router=auth_router)
-app.include_router(router=user_router)
-
+app.add_exception_handler(BaseAppException, common_exception_handler)
+app.include_router(all_routers)
 
 

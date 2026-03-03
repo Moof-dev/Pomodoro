@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from app.users.user_profile.repository import UserRepository
 from app.users.user_profile.schema import UserCreateSchema
 from app.users.auth.schema import UserLoginSchema
+from app.exception import UserAlreadyExistsException
 
 from app.users.auth.service import AuthService
 

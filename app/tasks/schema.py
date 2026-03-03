@@ -24,9 +24,14 @@ class TaskCreateSchema(BaseModel):
     name: str
     pomodoro_count: int
     category_id: int
+    user_id: int
 
 
 class TaskCategorySchema(BaseModel):
     id: int
-    type: str
     name: str
+    user_id: int
+
+    model_config = ConfigDict(
+        from_attributes=True
+    )

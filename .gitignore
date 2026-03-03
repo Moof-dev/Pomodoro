@@ -3,5 +3,3 @@
 __pyecache__/
 ./__pyecache__/
 *.local*
-docker.bat
-r.bat

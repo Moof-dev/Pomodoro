@@ -6,9 +6,9 @@ from app.infrastructure.database import get_db_session
 from app.infrastructure.cache import get_redis_connection
 
 
-from app.users.auth.client import GoogleClient
+from app.users.auth.client import GoogleClient, MailClient
 from app.exception import TokenNotCorrect, TokenExpired
-from app.tasks.repository import TaskRepository, TaskCache
+from app.tasks.repository import TaskRepository, TaskCache, TaskCategoryRepository
 from app.users.user_profile.repository import UserRepository
 
 from app.users.user_profile.service import UserService
@@ -23,17 +23,22 @@ from app.settings import Setting
 async def get_task_repository(db_session: AsyncSession = Depends(get_db_session)) -> TaskRepository:
     return TaskRepository(db_session=db_session)
 
+async def get_category_repository(db_session: AsyncSession = Depends(get_db_session)) -> TaskCategoryRepository:
+    return TaskCategoryRepository(db_session=db_session)
+
 async def get_tasks_cache_repository() -> TaskCache:
     redis_connection = get_redis_connection()
     return TaskCache(redis_connection)
 
 async def get_task_service(
     task_repository: TaskRepository = Depends(get_task_repository),
-    task_cache: TaskCache = Depends(get_tasks_cache_repository)
+    task_cache: TaskCache = Depends(get_tasks_cache_repository),
+    category_repository: TaskCategoryRepository = Depends(get_category_repository)
 ) -> TaskService:
     return TaskService(
         task_repository=task_repository,
-        task_cache=task_cache
+        task_cache=task_cache,
+        category_repository=category_repository
     )
 
 async def get_user_repository(db_session: AsyncSession = Depends(get_db_session)) -> UserRepository:
@@ -46,14 +51,19 @@ async def get_async_client() -> httpx.AsyncClient:
 async def get_google_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> GoogleClient:
     return GoogleClient(settings=Setting(), async_client=async_client)
 
+async def get_mail_client():
+    return MailClient()
+
 async def get_auth_service(
     user_repository: UserRepository = Depends(get_user_repository),
-    google_client: GoogleClient =  Depends(get_google_client)
+    google_client: GoogleClient =  Depends(get_google_client),
+    mail_client: MailClient = Depends(get_mail_client)
 ) -> AuthService:
     return AuthService(
         user_repository=user_repository,
         settings=Setting(),
-        google_client=google_client
+        google_client=google_client,
+        mail_client=mail_client
     )
 
 async def get_user_service(

@@ -19,5 +19,5 @@ class Categories(Base):
     __tablename__ = "Categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[Optional[str]]
     name: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey("UserProfile.id"), nullable=False)
