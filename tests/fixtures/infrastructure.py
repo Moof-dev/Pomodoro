@@ -1,12 +1,12 @@
 import pytest
-import asyncio
+
+from redis.asyncio import Redis
 from faker import Factory as FakerFactory
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 
 from app.settings import Setting
 from app.infrastructure.database.database import Base
-from app.users.auth.schema import GoogleUserData
 
 
 
@@ -45,6 +45,15 @@ async def init_model(event_loop):
 @pytest.fixture(scope="function")
 async def get_db_session() -> AsyncSession:
     yield AsyncSessionFactory()
+
+
+@pytest.fixture(scope="function")
+async def get_redis():
+    client = Redis(host="localhost", port=6389, db=0, decode_responses=True)
+    await client.ping()
+    yield client
+    await client.flushdb()
+    await client.aclose()
 
 
 

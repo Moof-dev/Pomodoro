@@ -1,8 +1,11 @@
 import asyncio
 
 import pytest
+from sqlalchemy import select, insert
+
 
 from app.users.auth.schema import GoogleUserData
+from app.infrastructure.database.models import UserProfile, Tasks, Categories
 
 pytest_plugins = [
     "tests.fixtures.users.auth.service",
@@ -15,6 +18,7 @@ pytest_plugins = [
     "tests.fixtures.tasks.service",
     "tests.fixtures.tasks.repository.cache_task",
     "tests.fixtures.tasks.repository.tasks",
+    "tests.fixtures.tasks.repository.category",
 
     "tests.fixtures.infrastructure",
 ]
@@ -37,3 +41,34 @@ def google_user_info_data(faker) -> GoogleUserData:
         name=faker.name(),
         access_token=faker.sha256()
     )
+
+
+async def create_test_user_in_db(user_model: UserProfile, db_session) -> int:
+    session = db_session
+
+    async with session as session:
+        session.add(user_model)
+        await session.commit()
+        user_id = user_model.id
+
+    return user_id
+
+
+async def create_test_category_in_db(category_model: Categories, db_session) -> int:
+    session = db_session
+
+    async with session as session:
+        session.add(category_model)
+        await session.commit()
+        category_id = category_model.id
+
+    return category_id
+
+
+async def create_test_task_in_db(task_model: Tasks, db_session) -> Tasks | None:
+    session = db_session
+
+    async with session as session:
+        session.add(task_model)
+        await session.commit()
+    return task_model

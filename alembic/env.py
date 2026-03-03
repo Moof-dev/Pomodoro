@@ -7,7 +7,7 @@ from alembic import context
 
 # Импорт твоих настроек и базы
 from app.settings import Setting
-from app.infrastructure.database import Base
+from app.infrastructure.database import models
 # Импорт всех моделей для autogenerate
 settings = Setting()
 config = context.config
@@ -20,7 +20,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # 3. Метаданные моделей
-target_metadata = Base.metadata
+target_metadata = models.Base.metadata
 
 def do_run_migrations(connection):
     """

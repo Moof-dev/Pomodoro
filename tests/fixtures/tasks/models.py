@@ -1,7 +1,7 @@
 import factory.fuzzy
 from pytest_factoryboy import register
 
-from app.tasks.models import Tasks, Categories
+from app.infrastructure.database.models import Tasks, Categories
 
 
 @register(_name="task_model")
@@ -24,6 +24,6 @@ class TaskCategoriesModelsFactory(factory.Factory):
         model = Categories
 
     id = factory.Faker("random_int", min=1, max=1000 )
-    type = factory.Faker("word")
     name = factory.Faker("word")
+    user_id = factory.Faker("random_int", min=1, max=1000)
 
