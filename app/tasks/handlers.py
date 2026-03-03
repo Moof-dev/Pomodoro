@@ -1,7 +1,8 @@
-
+import time
+import asyncio
 from typing import Annotated
 
-from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi import APIRouter, status, Depends, HTTPException, BackgroundTasks
 
 from app.dependecy import get_task_service, get_request_user_id
 from app.exception import TaskNotFound
@@ -10,9 +11,16 @@ from app.tasks.service import TaskService
 
 router = APIRouter(prefix="/task", tags=["task"])
 
+
+
+
+
 @router.get("/all", response_model=list[TaskSchema])
-async def get_tasks(task_service: Annotated[TaskService, Depends(get_task_service)]):
-    return await task_service.get_tasks()
+async def get_tasks(
+        task_service: Annotated[TaskService, Depends(get_task_service)]
+):
+    tasks = await task_service.get_tasks()
+    return tasks
 
 @router.post("/", response_model=TaskSchema)
 async def create_task(

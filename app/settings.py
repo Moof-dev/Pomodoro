@@ -1,5 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 class Setting(BaseSettings):
     #postgresql+psycopg2://user:password@hostname/database_name
@@ -21,6 +24,14 @@ class Setting(BaseSettings):
     GOOGLE_SECRET_KEY: str = ""
     GOOGLE_REDIRECT_URL: str = ""
     GOOGLE_TOKEN_URI: str = "https://accounts.google.com/o/oauth2/token"
+    CELERY_BROKER_URL: str = "amqp://guest:guest@localhost:5672//"
+
+    from_email: str = "moof.error@gmail.com"
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 465
+    SMTP_PASSWORD: str = ""
+
+
 
 
 
@@ -39,8 +50,7 @@ class Setting(BaseSettings):
                 f"20email&"
                 f"access_type=offline")
 
-
     model_config = SettingsConfigDict(
-        env_file=os.getenv("ENV_FILE", "../.dev.env"),
-        extra="ignore"  # Полезно добавить, чтобы не падать, если в .env есть лишние переменные
+        env_file=os.path.join(BASE_DIR, ".local.env"),
+        extra="ignore"
     )

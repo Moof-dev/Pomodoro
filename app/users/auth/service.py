@@ -4,7 +4,8 @@ from datetime import timedelta
 
 from jose import jwt, JWTError
 
-from app.users.auth.client import GoogleClient
+from app.users.auth.client import GoogleClient, MailClient
+
 from app.exception import UserNotFoundException, UserNotCorrectPasswordException, TokenExpired, TokenNotCorrect
 from app.users.user_profile.models import UserProfile
 from app.users.user_profile.repository import UserRepository
@@ -17,6 +18,7 @@ class AuthService:
     user_repository: UserRepository
     settings: Setting
     google_client: GoogleClient
+    mail_client: MailClient
 
     async def login(self, username: str, password: str) -> UserLoginSchema:
         user = await self.user_repository.get_user_by_username(username)
@@ -41,6 +43,7 @@ class AuthService:
         )
         created_user = await self.user_repository.create_user(create_user_data)
         access_token = self.generate_access_token(user_id=created_user.id)
+        self.mail_client.send_welcome_email(to=created_user.email)
         return UserLoginSchema(user_id=created_user.id, access_token=access_token)
 
 
