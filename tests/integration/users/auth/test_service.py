@@ -1,3 +1,5 @@
+from unittest.mock import AsyncMock, MagicMock
+
 from sqlalchemy import select, insert
 
 from app.users.auth.schema import UserLoginSchema
@@ -29,6 +31,8 @@ async def test_base_login__success(auth_service, get_db_session):
 
 
 async def test_google_auth__login_not_exist_user(auth_service, get_db_session):
+    #auth_service.mail_client.send_welcome_email = MagicMock()
+
     code = "fake_code"
     query = select(UserProfile)
 
@@ -38,12 +42,14 @@ async def test_google_auth__login_not_exist_user(auth_service, get_db_session):
     async with session as session:
         login_users = (await session.execute(select(UserProfile).where(UserProfile.id == user.user_id))).scalars().first()
 
+    #auth_service.mail_client.send_welcome_email.assert_called_once()
     assert len(users) == 0
     assert users is not None
     assert login_users is not None
 
 
 async def test_google_auth__login_exist_user(auth_service, get_db_session):
+
     code = "fake_code"
     query = insert(UserProfile).values(
         id=EXIST_GOOGLE_USER_ID,
@@ -61,6 +67,6 @@ async def test_google_auth__login_exist_user(auth_service, get_db_session):
         login_users = (await session.execute(select(UserProfile).where(
             UserProfile.id == user_data.user_id))).scalars().first()
 
-
     assert login_users.email == EXIST_GOOGLE_USER_EMAIL
     assert login_users.id == EXIST_GOOGLE_USER_ID
+

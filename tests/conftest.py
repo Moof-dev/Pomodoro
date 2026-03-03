@@ -26,7 +26,7 @@ def event_loop():
     loop.close()
 
 EXIST_GOOGLE_USER_ID = 20
-EXIST_GOOGLE_USER_EMAIL = "test@mail.com"
+EXIST_GOOGLE_USER_EMAIL = "moof.error@gmail.com"
 
 @pytest.fixture
 def google_user_info_data(faker) -> GoogleUserData:
