@@ -24,7 +24,7 @@ class Setting(BaseSettings):
     GOOGLE_SECRET_KEY: str = ""
     GOOGLE_REDIRECT_URL: str = ""
     GOOGLE_TOKEN_URI: str = "https://accounts.google.com/o/oauth2/token"
-    CELERY_REDIS_URL: str = "redis://localhost:6379"
+    CELERY_BROKER_URL: str = "amqp://guest:guest@localhost:5672//"
 
     from_email: str = "moof.error@gmail.com"
     SMTP_HOST: str = "smtp.gmail.com"

@@ -16,3 +16,8 @@ services:
     restart: always
     ports:
       - '6389:6379'
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - '5682:5672'
+      - '15682:15672'
